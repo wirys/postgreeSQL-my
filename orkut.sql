@@ -1,4 +1,4 @@
-﻿create table USUARIO (
+create table USUARIO (
 	idUsuario 		integer 	not null,
 	nomeUsuario 		varchar(45)	not null,
 	cidadeUsuario		varchar(45),
@@ -47,11 +47,11 @@ create table ORKUT (
 		references COMUNIDADE(idComunidade)
 );
 
-insert into USUARIO(idUsuario,nomeUsuario,cidadeUsuario,idadeUsuario,qatdAmigosUsuarios)
+insert into USUARIO(idUsuario,nomeUsuario,cidadeUsuario,idadeUsuario,qtdAmigosUsuarios)
 VALUES 
 (1,'wirys da cunha francisco','iconha',19,288),
 (2,'Lidiane Louzada gomes', 'Conduru',20,355),
-(3,'Maria Joaquina Cruz','Rio de Janeiro',35,500)
+(3,'Maria Joaquina Cruz','Rio de Janeiro',35,500);
 
 insert into COMUNIDADE (idComunidade,proprietarioComunidade,nomeComunidade,qtdUsuariosComunidade)
 values 
@@ -72,38 +72,61 @@ values
 -- Coluna coluna funcao de agregação
 --Group by 
 	
-1)
+1) --Crie uma consulta que apresente uma relação de comunidades e seus proprietários.
 select C.idcomunidade, C.nomecomunidade , u.idusuario, u.nomeusuario
 from USUARIO AS U, COMUNIDADE AS C
 where U.idUsuario = C.proprietarioComunidade;
 
-2)
+2)  -- Escreva uma consulta para apresentar uma relação de comunidades e seus participantes.
 
 select C.idcomunidade , C.nomecomunidade,U.nomeusuario, O.idUsuarioOrkut, O.idComunidadeOrkut
 from COMUNIDADE AS C , ORKUT AS O, USUARIO AS U
 WHERE O.idComunidadeOrkut = C.idcomunidade 
 AND  O.idUsuarioOrkut = u.idusuario
 
-3)
+3) --Estabeleça um comando o qual possa ser usado para recuperar todas as comunidades sob a propriedade de “Maria Joaquina Cruz”.
 select C.idcomunidade , C.nomecomunidade,U.idUsuario,U.nomeusuario
 from COMUNIDADE AS C , USUARIO AS U
 where U.idUsuario = C.proprietarioComunidade 
 and U.nomeusuario = 'Lidiane Louzada gomes'; 
 
 
-4)
+4) --Especifique uma consulta que apresente o somatório das quantidades de participantes das comunidades da “Maria Joaquina Cruz”.
 Select SUM(  C.qtdUsuariosComunidade)
 from Comunidade as C, usuario as U
 where U.idUsuario = C.proprietarioComunidade 
 and U.nomeusuario = 'Lidiane Louzada gomes'; 
 
-5) 
+5) --Especifique uma consulta que apresente o somatório das quantidades de participantes das comunidades de cada usuário proprietário de uma ou mais comunidades.
 select  U.idUsuario,U.nomeusuario,SUM(  C.qtdUsuariosComunidade)
 from Comunidade as C, usuario as U
 where U.idUsuario = C.proprietarioComunidade 
 group by U.idUsuario,U.nomeusuario;
 
-6) select  U.idUsuario,U.nomeusuario,COUNT(*)
+
+6) -- Crie um comando para apresentar a quantidade de comunidades sob a propriedade de cada usuário que é proprietário de uma ou mais comunidades.
+ select  U.idUsuario,U.nomeusuario,COUNT(*)
 from Comunidade as C, usuario as U
 where U.idUsuario = C.proprietarioComunidade 
 group by U.idUsuario,U.nomeusuario;
+
+
+7) -- Determine uma consulta com a qual seja possível obter a quantidade de amigos de cada usuário sem utilizar a coluna 'qtdAmigosUsuario'.
+ select u.idUsuario, u.nomeUsuario, COUNT(*)
+FROM usuario as u, amigo as a
+where u.idUsuario = a.idUsuario2
+group by u.idUsuario, u.nomeUsuario
+
+
+8) -- Para cada proprietário de comunidade, apresente a quantidade de participantes da comunidade sob sua propriedade com a maior quantidade de participantes. 
+
+select u.idUsuario , u.NomeUsuario , MAX(c.qtdusuarioscomunidade)
+from usuario as u , comunidade as c
+where u.idUsuario = c.proprietariocomunidade
+group by u.idusuario, u.nomeusuario
+ 
+9) --Apresente uma consulta que possa ser usada para listar os usuários sem amigos. Sua solução não pode usar a coluna 'qtdAmigosUsuario'.
+select u.idUsuario, U.nomeusuario 
+ from usuario as u left outer join amigo as a
+ on u.idUsuario = a.idUsuario2
+ where a.idAmigo is null
