@@ -130,3 +130,12 @@ select u.idUsuario, U.nomeusuario
  from usuario as u left outer join amigo as a
  on u.idUsuario = a.idUsuario2
  where a.idAmigo is null
+ 
+ 
+10) -- Crie um comando com o qual seja possível recuperar usuários populares. Considere como usuário popular aquele que tiver mais de 10000 “amigos” na rede social.
+
+
+11) --Escreva uma consulta recuperar usuários com a propriedade de mais de 50 comunidades.
+
+
+12) --Especifique um comando para a recuperação dos usuários que possuem mais de 1000000 de participantes em suas comunidades como um todo.
